@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Hashes SHA-256</title>
+    <meta name="author" content="Miguel Santiago Kremzky">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+    <style>
+        body {
+            background-color: #333;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            background-color: #007bff;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            position: relative;
+        }
+
+        .header img {
+            width: 80px;
+            height: auto;
+            position: absolute;
+            top: 50%;
+            right: 20px;
+            transform: translateY(-50%);
+            border-radius: 50%;
+            border: 2px solid #007bff;
+        }
+
+        .image_1 {
+            width: 80px;
+            height: auto;
+            position: absolute;
+            top: 50%;
+            left: 40px;
+            transform: translateY(-50%);
+            border-radius: 50%;
+            border: 2px solid #007bff;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            text-align: center;     
+        }
+
+        .result {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin: 10px 0;
+            text-align: left;
+        }
+
+        .filename {
+            font-weight: bold;
+        }
+
+        .hash {
+            color: #007bff;
+        }
+
+        .datetime {
+            font-style: italic;
+        }
+
+        .button-icon {
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .button-text {
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+
+        .powered-by {
+            font-style: italic;
+            color: white;
+        }
+
+        .container button {
+            margin-right: 10px;
+            max-width: 172px;
+            margin: 0 auto;
+        }
+        
+        h1, p {
+            line-height: 0.1;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <div class="image_1">
+            <img src="https://lh3.googleusercontent.com/drive-viewer/AITFw-w6oPj_w0NdXcz1l3-P_2Ex2salHSpqaJUi8j6dANurcHf-J8VmRtsMlKZV8hAnAa7CjVzlCfm291yG8UioEvDNr17jog=s2560" alt="Logo_1">
+        </div>
+        <img src="https://lh3.googleusercontent.com/drive-viewer/AITFw-wtg9zZAR5D4jGdq3R4dLVn4BiPYlcP9OO0vnBPUlwx_z6xqTcAXRGE_Q-dTZf99ikcfuGNrvsMHy4gcq18PjmEagZ78w=s2560" alt="Logo_2">
+        <h1>Calculadora de Hashes SHA-256</h1>
+        <p>Versión 2.1</p>
+        <div class="powered-by">Powered by MSK21 Software</div>
+    </div>
+    <div class="container">
+        <input type="file" id="fileInput" multiple>
+        <button onclick="calculateHashes()"><i class="fas fa-calculator button-icon"></i><span class="button-text">Calcular Hashes</span></button>
+        <button onclick="downloadResults()"><i class="fas fa-download button-icon"></i><span class="button-text">Descargar Resultados</span></button>
+        <div id="hashResults"></div>
+    </div>
+
+    <script>
+        const calculatedHashes = [];
+
+        async function calculateHashes() {
+            const fileInput = document.getElementById('fileInput');
+            const hashResults = document.getElementById('hashResults');
+
+            for (const file of fileInput.files) {
+                const reader = new FileReader();
+
+                reader.onload = async function(event) {
+                    const dataBuffer = event.target.result;
+                    const hashBuffer = await crypto.subtle.digest('SHA-256', dataBuffer);
+                    const hashArray = Array.from(new Uint8Array(hashBuffer));
+                    const hashHex = hashArray.map(byte => byte.toString(16).padStart(2, '0')).join('');
+
+                    const currentDate = new Date();
+                    // Ajustar la hora a UTC-3
+                    currentDate.setUTCHours(currentDate.getUTCHours() - 3);
+                    const formattedDate = currentDate.toISOString();
+
+                    const fileInfo = {
+                        filename: file.name,
+                        extension: file.name.split('.').pop(),
+                        datetime: formattedDate,
+                        hash: hashHex
+                    };
+
+                    calculatedHashes.push(fileInfo);
+
+                    const resultElement = document.createElement('div');
+                    resultElement.classList.add('result');
+                    resultElement.innerHTML = `
+                        <p class="filename">Nombre de archivo: ${fileInfo.filename}</p>
+                        <p>Extensión: ${fileInfo.extension}</p>
+                        <p class="datetime">Fecha y Hora (UTC-3): ${fileInfo.datetime}</p>
+                        <p class="hash">Hash SHA-256: ${fileInfo.hash}</p>
+                    `;
+                    hashResults.appendChild(resultElement);
+                };
+
+                reader.readAsArrayBuffer(file);
+            }
+        }
+
+        function downloadResults() {
+            if (calculatedHashes.length === 0) {
+                alert('No hay resultados para descargar.');
+                return;
+            }
+
+            const resultsText = calculatedHashes.map(item => `
+                Nombre de archivo: ${item.filename}
+                Extensión: ${item.extension}
+                Fecha y Hora (UTC-3): ${item.datetime}
+                Hash SHA-256: ${item.hash}
+                ------------------------------------------
+            `).join('\n');
+
+            const blob = new Blob([resultsText], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'Resultados_SHA-256.txt';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>
