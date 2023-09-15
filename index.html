@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -21,6 +21,7 @@
             text-align: center;
             padding: 10px;
             position: relative;
+            margin-bottom: 20px;
         }
 
         .header img {
@@ -32,6 +33,26 @@
             transform: translateY(-50%);
             border-radius: 50%;
             border: 2px solid #007bff;
+        }
+
+        .info-container {
+            background-color: white;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin: 20px auto;
+            max-width: 920px;
+            text-align: center;
+        }
+
+        .info-container h2 {
+            font-size: 20px;
+            margin: 0 0 10px;
+        }
+
+        .info-container p {
+            line-height: 1.5;
+            margin: 0;
         }
 
         .image_1 {
@@ -46,7 +67,7 @@
         }
 
         .container {
-            max-width: 700px;
+            max-width: 900px;
             margin: 0 auto;
             padding: 20px;
             background-color: white;
@@ -100,9 +121,8 @@
         }
     </style>
 </head>
-
 <body>
-    <div class="header">
+    <header class="header">
         <div class="image_1">
             <img src="https://lh3.googleusercontent.com/drive-viewer/AITFw-zyXS0pc-Zg9XYgWL-0Rd7hJyjjXbzrXL6TieIoZfkCp-m4IrWo_KKwg1YLbEIYtVrjR_UrUWwuSQ_doyniPp4ejLAu8A=s2560" alt="Logo_1">
         </div>
@@ -110,6 +130,17 @@
         <h1>Calculadora Algorítmica SHA-256</h1>
         <p>Versión 2.2</p>
         <div class="powered-by">Powered by MSK21 Software</div>
+    </header>
+    <div class="info-container">
+        <h2>La importancia de usar esta herramienta web en el ámbito de la informática forense.</h2>
+        <p style="text-align: justify;">El uso de una herramienta web como la <b>Calculadora Algorítmica SHA-256</b> en informática forense es crucial por las siguientes razones:</p>
+        <p style="text-align: justify;"><b>Veracidad de la Evidencia:</b> En informática forense, la evidencia digital es esencial para investigar delitos cibernéticos y casos relacionados con tecnología. Esta herramienta garantiza la integridad y autenticidad de los datos, lo que es esencial para que la evidencia sea aceptada en un tribunal.</p>
+        <p style="text-align: justify;"><b>Detección de Alteraciones:</b> Permite detectar cualquier alteración o manipulación de archivos digitales. Los valores hash SHA-256 son únicos para cada archivo, por lo que cualquier cambio, incluso menor, se reflejará en un hash diferente. Esto es crucial para identificar intentos de encubrimiento o alteración de pruebas.</p>
+        <p style="text-align: justify;"><b>Reconstrucción de Actividades: </b>Facilita la reconstrucción de actividades digitales. Los valores hash proporcionan un registro de la historia de los archivos, lo que permite rastrear cambios, transferencias y acciones realizadas en un sistema o dispositivo digital.</p>
+        <p style="text-align: justify;"><b>Validación de Copias de Seguridad:</b> En la recuperación de datos y la restauración de sistemas, la herramienta se utiliza para verificar la integridad de las copias de seguridad y garantizar que los datos restaurados sean idénticos a los originales.</p>
+        <p style="text-align: justify;"><b>Cumplimiento Legal:</b> Cumple con los requisitos legales al proporcionar pruebas sólidas de integridad y autenticidad de la evidencia digital. Esto es esencial para garantizar que las investigaciones y los resultados forenses sean admisibles en un tribunal de justicia.</p>
+        <p style="text-align: justify;"><b>Protección de la Cadena de Custodia:</b> Ayuda a mantener la cadena de custodia de la evidencia digital. Los valores hash se utilizan para documentar y verificar quién ha tenido acceso a la evidencia y cuándo.</p>
+        <p style="text-align: justify;">En resumen, el uso de esta herramienta web en informática forense es esencial para preservar la integridad de la evidencia digital, detectar manipulaciones, reconstruir actividades y garantizar el cumplimiento legal, lo que contribuye a investigaciones precisas y exitosas en el ámbito de la seguridad cibernética y la ley.</p>
     </div>
     <div class="container">
         <input type="file" id="fileInput" multiple>
@@ -117,7 +148,6 @@
         <button onclick="downloadResults()"><i class="fas fa-download button-icon"></i><span class="button-text">Descargar Resultados</span></button>
         <div id="hashResults"></div>
     </div>
-
     <script>
         const calculatedHashes = [];
 
