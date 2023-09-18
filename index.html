@@ -9,6 +9,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
     <style>
         body {
+            background-image: url('background.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center;
             background-color: #333;
             font-family: Arial, sans-serif;
             margin: 0;
@@ -16,12 +21,13 @@
         }
 
         .header {
-            background-color: #007bff;
+            background-color: rgba(0, 0, 0, 0.7);
             color: white;
             text-align: center;
             padding: 10px;
             position: relative;
             margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(128, 128, 128, 0.5);
         }
 
         .header img {
@@ -32,11 +38,11 @@
             right: 20px;
             transform: translateY(-50%);
             border-radius: 50%;
-            border: 2px solid #007bff;
         }
 
         .info-container {
-            background-color: white;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
@@ -48,12 +54,13 @@
         .info-container h2 {
             font-size: 20px;
             margin: 0 0 10px;
+            text-shadow: 2px 2px 4px rgba(128, 128, 128, 0.5);
         }
 
         .info-container p {
             line-height: 1.5;
             margin: 0;
-	    font-size: 14px;
+            font-size: 14px;
         }
 
         .image_1 {
@@ -64,17 +71,17 @@
             left: 40px;
             transform: translateY(-50%);
             border-radius: 50%;
-            border: 2px solid #007bff;
         }
 
         .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: white;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 10px;
+            border: 1px solid #ccc;
             border-radius: 5px;
-            text-align: center;     
+            margin: 0 auto;
+            max-width: 920px;
+            text-align: center;
         }
 
         .result {
@@ -82,18 +89,12 @@
             padding: 10px;
             margin: 10px 0;
             text-align: left;
+            margin-bottom: 10px;
         }
 
-        .filename {
-            font-weight: bold;
-        }
-
-        .hash {
-            color: #007bff;
-        }
-
-        .datetime {
-            font-style: italic;
+        .result p {
+            line-height: 1.2;
+            margin: 5px;
         }
 
         .button-icon {
@@ -109,6 +110,7 @@
         .powered-by {
             font-style: italic;
             color: white;
+            text-shadow: 2px 2px 4px rgba(128, 128, 128, 0.5);
         }
 
         .container button {
@@ -129,7 +131,7 @@
         </div>
         <img src="https://lh3.googleusercontent.com/drive-viewer/AITFw-ygwV4UUs-pcnuqBX8sP2IBTq5vTAGvVmTw-aahEbunNMdZHIEpbaopqnyqi44vkkL1ozhzg04rVbcQcB5KAFuNjywYIw=s2560" alt="Logo_2">
         <h1>Calculadora Algorítmica SHA-256</h1>
-        <p>Versión 2.2</p>
+        <p>Versión 2.5</p>
         <div class="powered-by">Powered by MSK21 Software</div>
     </header>
     <div class="info-container">
@@ -152,47 +154,44 @@
     <script>
         const calculatedHashes = [];
 
-        async function calculateHashes() {
-            const fileInput = document.getElementById('fileInput');
-            const hashResults = document.getElementById('hashResults');
+async function calculateHashes() {
+    const fileInput = document.getElementById('fileInput');
+    const hashResults = document.getElementById('hashResults');
 
-            for (const file of fileInput.files) {
-                const reader = new FileReader();
+    for (const file of fileInput.files) {
+        const reader = new FileReader();
 
-                reader.onload = async function(event) {
-                    const dataBuffer = event.target.result;
-                    const hashBuffer = await crypto.subtle.digest('SHA-256', dataBuffer);
-                    const hashArray = Array.from(new Uint8Array(hashBuffer));
-                    const hashHex = hashArray.map(byte => byte.toString(16).padStart(2, '0')).join('');
+        reader.onload = async function(event) {
+            const dataBuffer = event.target.result;
+            const hashBuffer = await crypto.subtle.digest('SHA-256', dataBuffer);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            const hashHex = hashArray.map(byte => byte.toString(16).padStart(2, '0')).join('');
 
-                    const currentDate = new Date();
-                    // Ajustar la hora a UTC-3
-                    currentDate.setUTCHours(currentDate.getUTCHours() - 3);
-                    const formattedDate = currentDate.toISOString();
+            const currentDate = new Date();
+            currentDate.setUTCHours(currentDate.getUTCHours() - 3);
+            const formattedDate = currentDate.toISOString();
 
-                    const fileInfo = {
-                        filename: file.name,
-                        extension: file.name.split('.').pop(),
-                        datetime: formattedDate,
-                        hash: hashHex
-                    };
+            const fileInfo = {
+                filename: file.name,
+                datetime: formattedDate,
+                hash: hashHex
+            };
 
-                    calculatedHashes.push(fileInfo);
+            calculatedHashes.push(fileInfo);
 
-                    const resultElement = document.createElement('div');
-                    resultElement.classList.add('result');
-                    resultElement.innerHTML = `
-                        <p class="filename">Nombre de archivo: ${fileInfo.filename}</p>
-                        <p>Extensión: ${fileInfo.extension}</p>
-                        <p class="datetime">Fecha y Hora (UTC-3): ${fileInfo.datetime}</p>
-                        <p class="hash">Hash SHA-256: ${fileInfo.hash}</p>
-                    `;
-                    hashResults.appendChild(resultElement);
-                };
+            const resultElement = document.createElement('div');
+            resultElement.classList.add('result');
+            resultElement.innerHTML = `
+                <p><b>Nombre de archivo:</b> ${fileInfo.filename}</p>
+                <p><b>Fecha y Hora (UTC-3):</b> ${fileInfo.datetime}</p>
+                <p><span style="color: #007bff;"><b>Hash SHA-256:</b> ${fileInfo.hash}</span></p>
+            `;
+            hashResults.appendChild(resultElement);
+        };
 
-                reader.readAsArrayBuffer(file);
-            }
-        }
+        reader.readAsArrayBuffer(file);
+    }
+}
 
         function downloadResults() {
             if (calculatedHashes.length === 0) {
@@ -202,7 +201,6 @@
 
             const resultsText = calculatedHashes.map(item => `
                 Nombre de archivo: ${item.filename}
-                Extensión: ${item.extension}
                 Fecha y Hora (UTC-3): ${item.datetime}
                 Hash SHA-256: ${item.hash}
                 ------------------------------------------
